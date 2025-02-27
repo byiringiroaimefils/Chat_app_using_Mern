@@ -1,13 +1,13 @@
 import { useEffect, useRef } from "react";
-import useGetMessages from "../../hooks/useGetMessages";
-import MessageSkeleton from "../skeletons/MessageSkeleton";
 import Message from "./Message";
-import useListenMessages from "../../hooks/useListenMessages";
+import MessageSkeleton from "../skeletons/MessageSkeleton";
+import useGetMessages from "../../hooks/useGetMessages";
+import { useChat } from "../../context/ChatContext";
 
 const Messages = () => {
 	const { messages, loading } = useGetMessages();
-	useListenMessages();
 	const lastMessageRef = useRef();
+	const { selectedConversation } = useChat();
 
 	useEffect(() => {
 		setTimeout(() => {
@@ -16,7 +16,7 @@ const Messages = () => {
 	}, [messages]);
 
 	return (
-		<div className='px-4 flex-1 overflow-auto'>
+		<div className='flex-1 overflow-auto px-4'>
 			{!loading &&
 				messages.length > 0 &&
 				messages.map((message) => (
@@ -27,7 +27,7 @@ const Messages = () => {
 
 			{loading && [...Array(3)].map((_, idx) => <MessageSkeleton key={idx} />)}
 			{!loading && messages.length === 0 && (
-				<p className='text-center'>Send a message to start the conversation</p>
+				<p className='text-center text-gray-500'>Send a message to start the conversation</p>
 			)}
 		</div>
 	);

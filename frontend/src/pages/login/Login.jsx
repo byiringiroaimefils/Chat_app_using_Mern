@@ -14,51 +14,66 @@ const Login = () => {
 	};
 
 	return (
-		<div className='flex flex-col items-center justify-center min-w-96 mx-auto'>
-			<div className='w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0'>
-				<h1 className='text-3xl font-semibold text-center text-gray-300'>
-					Login
-					<span className='text-blue-500'> ChatApp</span>
-				</h1>
+		<div className='flex min-h-screen items-center justify-center bg-gray-50'>
+			<div className='w-full max-w-md space-y-8 p-8 bg-white rounded-xl shadow-lg'>
+				<div className='text-center'>
+					<h2 className='mt-6 text-3xl font-bold text-gray-900'>Welcome back</h2>
+					<p className='mt-2 text-sm text-gray-600'>
+						Don't have an account?{" "}
+						<Link to='/signup' className='font-medium text-blue-600 hover:text-blue-500'>
+							Sign up
+						</Link>
+					</p>
+				</div>
 
-				<form onSubmit={handleSubmit}>
-					<div>
-						<label className='label p-2'>
-							<span className='text-base label-text'>Username</span>
-						</label>
-						<input
-							type='text'
-							placeholder='Enter username'
-							className='w-full input input-bordered h-10'
-							value={username}
-							onChange={(e) => setUsername(e.target.value)}
-						/>
+				<form onSubmit={handleSubmit} className='mt-8 space-y-6'>
+					<div className='space-y-4'>
+						<div>
+							<label htmlFor='username' className='block text-sm font-medium text-gray-700'>
+								Username
+							</label>
+							<input
+								type='text'
+								id='username'
+								value={username}
+								onChange={(e) => setUsername(e.target.value)}
+								className='mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500'
+								placeholder='Enter your username'
+								required
+							/>
+						</div>
+
+						<div>
+							<label htmlFor='password' className='block text-sm font-medium text-gray-700'>
+								Password
+							</label>
+							<input
+								type='password'
+								id='password'
+								value={password}
+								onChange={(e) => setPassword(e.target.value)}
+								className='mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500'
+								placeholder='Enter your password'
+								required
+							/>
+						</div>
 					</div>
 
-					<div>
-						<label className='label'>
-							<span className='text-base label-text'>Password</span>
-						</label>
-						<input
-							type='password'
-							placeholder='Enter Password'
-							className='w-full input input-bordered h-10'
-							value={password}
-							onChange={(e) => setPassword(e.target.value)}
-						/>
-					</div>
-					<Link to='/signup' className='text-sm  hover:underline hover:text-blue-600 mt-2 inline-block'>
-						{"Don't"} have an account?
-					</Link>
-
-					<div>
-						<button className='btn btn-block btn-sm mt-2' disabled={loading}>
-							{loading ? <span className='loading loading-spinner '></span> : "Login"}
-						</button>
-					</div>
+					<button
+						type='submit'
+						className='w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed'
+						disabled={loading}
+					>
+						{loading ? (
+							<div className='w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin'></div>
+						) : (
+							"Sign in"
+						)}
+					</button>
 				</form>
 			</div>
 		</div>
 	);
 };
+
 export default Login;

@@ -1,32 +1,41 @@
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 
+/**
+ * Middleware to protect routes that require authentication
+ * Verifies the JWT token and attaches user to the request object
+ */
 const protectRoute = async (req, res, next) => {
 	try {
+		// Get token from cookies
 		const token = req.cookies.jwt;
 
+		// Check if token exists
 		if (!token) {
-			return res.status(401).json({ error: "Unauthorized - No Token Provided" });
+			return res.status(401).json({ error: "Please login first" });
 		}
 
+		// Verify token and decode user id
 		const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-		if (!decoded) {
-			return res.status(401).json({ error: "Unauthorized - Invalid Token" });
-		}
-
+		// Find user by id (exclude password) from decoded token
 		const user = await User.findById(decoded.userId).select("-password");
 
+		// Check if user still exists in database
 		if (!user) {
-			return res.status(404).json({ error: "User not found" });
+			return res.status(401).json({ error: "User not found" });
 		}
 
+		// Attach user object to request for use in protected routes
 		req.user = user;
 
+		// Move to next middleware/route handler
 		next();
 	} catch (error) {
-		console.log("Error in protectRoute middleware: ", error.message);
-		res.status(500).json({ error: "Internal server error" });
+		// Log any authentication errors
+		console.log("Auth Error:", error.message);
+		// Return invalid token error to client
+		res.status(401).json({ error: "Invalid token" });
 	}
 };
 
